@@ -104,8 +104,7 @@ namespace ShipIt.Controllers
         {
             //TODO Find better place for method
             var orderWeight = orderLines.Select(line => line.quantity * products[line.gtin].Weight).Sum();
-            var truckCapacity = 2000;
-            //TODO weight in grams?! Divide by 1000?
+            var truckCapacity = 2000000;
             
             var trucksNeeded = (int) Math.Ceiling(orderWeight / truckCapacity);
             return trucksNeeded;
