@@ -4,16 +4,14 @@ namespace ShipIt.Models.DataModels
 {
     public class InboundStockDataModel : DataModel
     {
+        //TODO use product and company data models
         [DatabaseColumnName("gtin_cd")] public string Gtin { get; set; }
         [DatabaseColumnName("gcp_cd")] public string Gcp { get; set; }
         [DatabaseColumnName("gtin_nm")] public string Name { get; set; }
-        [DatabaseColumnName("m_g")] public double Weight { get; set; }
         [DatabaseColumnName("l_th")] public int LowerThreshold { get; set; }
-        [DatabaseColumnName("p_id")] public int ProductId { get; set; }
         [DatabaseColumnName("ds")] public int Discontinued { get; set; }
         [DatabaseColumnName("min_qt")] public int MinimumOrderQuantity { get; set; }
         [DatabaseColumnName("hld")] public int Held { get; set; }
-        [DatabaseColumnName("gln_nm")] public string CompanyName { get; set; }
         [DatabaseColumnName("gln_addr_02")] public string Addr2 { get; set; }
         [DatabaseColumnName("gln_addr_03")] public string Addr3 { get; set; }
         [DatabaseColumnName("gln_addr_04")] public string Addr4 { get; set; }

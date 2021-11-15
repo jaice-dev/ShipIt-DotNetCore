@@ -38,6 +38,15 @@ namespace ShipIt.Controllers
 
             Log.Debug(String.Format("Found operations manager: {0}", operationsManager));
 
+            try
+            {
+
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw;
+            }
             var allStock = _stockRepository.GetInboundStock(warehouseId);
 
             var orderlinesByCompany = new Dictionary<Company, List<InboundOrderLine>>();
