@@ -72,35 +72,6 @@ namespace ShipIt.Repositories
             var parameter = new NpgsqlParameter("@w_id", warehouseId);
             string noInboundStockIdMessage = string.Format("No inbound stock for warehouse ID {0}", warehouseId);
             return base.RunGetQuery(sql, reader => new InboundStockDataModel(reader), noInboundStockIdMessage, parameter);
-
-            // foreach (var item in inboundStock)
-            // {
-            //     var orderQuantity = Math.Max(item.LowerThreshold * 3 - item.Held, item.MinimumOrderQuantity);
-            //
-            //     Company company = new Company();
-            //     company.Gcp = item.Gcp;
-            //     company.Addr2 = item.Addr2;
-            //     company.Addr3 = item.Addr3;
-            //     company.Addr4 = item.Addr4;
-            //     company.PostalCode = item.PostalCode;
-            //     company.City = item.City;
-            //     company.Tel = item.Tel;
-            //     company.Mail = item.Mail;
-            //
-            //     if (!orderlinesByCompany.ContainsKey(company))
-            //     {
-            //         orderlinesByCompany.Add(company, new List<InboundOrderLine>());
-            //     }
-            //
-            //     orderlinesByCompany[company].Add(
-            //         new InboundOrderLine()
-            //         {
-            //             gtin = item.Gtin,
-            //             name = item.Name,
-            //             quantity = orderQuantity
-            //         });
-            // }
-            // return orderlinesByCompany;
         }
 
             
