@@ -1,17 +1,19 @@
-﻿﻿using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
- using Microsoft.AspNetCore.Mvc;
- using ShipIt.Exceptions;
+using Microsoft.AspNetCore.Mvc;
+using ShipIt.Exceptions;
 using ShipIt.Models.ApiModels;
 using ShipIt.Repositories;
+using static ShipIt_DotNetCore.Services.OutboundOrderService;
 
 namespace ShipIt.Controllers
 {
     [Route("orders/outbound")]
     public class OutboundOrderController : ControllerBase
     {
-        private static readonly log4net.ILog Log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod()?.DeclaringType);
+        private static readonly log4net.ILog Log =
+            log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod()?.DeclaringType);
 
         private readonly IStockRepository _stockRepository;
         private readonly IProductRepository _productRepository;
@@ -32,8 +34,10 @@ namespace ShipIt.Controllers
             {
                 if (gtins.Contains(orderLine.gtin))
                 {
-                    throw new ValidationException(String.Format("Outbound order request contains duplicate product gtin: {0}", orderLine.gtin));
+                    throw new ValidationException(
+                        String.Format("Outbound order request contains duplicate product gtin: {0}", orderLine.gtin));
                 }
+
                 gtins.Add(orderLine.gtin);
             }
 
@@ -98,16 +102,6 @@ namespace ShipIt.Controllers
             var trucksNeeded = CalculateTrucksNeeded(orderLines, products);
 
             return new OutboundOrderRequestResponse {TrucksNeeded = trucksNeeded};
-        }
-
-        private static int CalculateTrucksNeeded(List<OrderLine> orderLines, Dictionary<string, Product> products)
-        {
-            //TODO Find better place for method
-            var orderWeight = orderLines.Select(line => line.quantity * products[line.gtin].Weight).Sum();
-            var truckCapacity = 2000000;
-            
-            var trucksNeeded = (int) Math.Ceiling(orderWeight / truckCapacity);
-            return trucksNeeded;
         }
     }
 }
