@@ -8,7 +8,14 @@ VSCode should automatically set up and install everything you'll need apart from
 Create 2 new postgres databases - one for the main program and one for our test database.
 Ask a team member for a dump of the production databases to create and populate your tables.
 
-restore the dump by running "\i {path to the dump}" in the PSQL tool in pgadmin.
+Restore the dump by running "\i {path to the dump}" in the PSQL tool in pgadmin.
+
+Perform the following DB Migration on both databases:
+  ALTER TABLE em DROP CONSTRAINT em_pkey;
+  ALTER TABLE em ADD COLUMN em_id serial PRIMARY KEY;
+  
+_(Note: This schema change will not effect any existing clients - it is a backwards
+compatible change as any code relying on employee name for DB queries will still function correctly given unique employee names)_
 
 Then for each of the projects, add a `.env` file at the root of the project.
 That file should contain a property named `POSTGRES_CONNECTION_STRING`.
