@@ -38,19 +38,19 @@ namespace ShipIt.Controllers
             var operationsManager = new Employee(_employeeRepository.GetOperationsManager(warehouseId));
 
             Log.Debug(String.Format("Found operations manager: {0}", operationsManager));
-            
+
             try
             {
                 var allStock = _stockRepository.GetInboundStock(warehouseId);
                 var orderlinesByCompany = GetOrderLinesByCompany(allStock);
-                
+
                 Log.Debug(String.Format("Constructed order lines: {0}", orderlinesByCompany));
 
                 var orderSegments = GetOrderSegments(orderlinesByCompany);
 
                 Log.Info("Constructed inbound order");
 
-                return new InboundOrderResponse()
+                return new InboundOrderResponse
                 {
                     OperationsManager = operationsManager,
                     WarehouseId = warehouseId,
@@ -59,14 +59,13 @@ namespace ShipIt.Controllers
             }
             catch
             {
-                return new InboundOrderResponse()
+                return new InboundOrderResponse
                 {
                     OperationsManager = operationsManager,
                     WarehouseId = warehouseId,
                     OrderSegments = new List<OrderSegment>()
                 };
             }
-            
         }
 
         [HttpPost("")]
