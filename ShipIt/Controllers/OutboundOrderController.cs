@@ -95,15 +95,23 @@ namespace ShipIt.Controllers
 
             _stockRepository.RemoveStock(request.WarehouseId, lineItems);
 
+            var trucksNeeded = CalculateTrucksNeeded(orderLines, products);
+
+            return new OutboundOrderRequestResponse {TrucksNeeded = trucksNeeded};
+        }
+
+        private static int CalculateTrucksNeeded(List<OrderLine> orderLines, Dictionary<string, Product> products)
+        {
+            //TODO Find better place for method
             float orderWeight = 0;
             int truckCapacity = 2000;
             foreach (var order in orderLines)
             {
                 orderWeight += order.quantity * products[order.gtin].Weight;
             }
+
             var trucksNeeded = (int) Math.Ceiling(orderWeight / truckCapacity);
-            
-            return new OutboundOrderRequestResponse {TrucksNeeded = trucksNeeded};
+            return trucksNeeded;
         }
     }
 }
