@@ -203,8 +203,8 @@ namespace ShipItTest
         public void TestOutboundOrderTrucksNeededResponse()
         {
             onSetUp();
-            stockRepository.AddStock(WAREHOUSE_ID, new List<StockAlteration>() { new StockAlteration(productId, 100) });
-            //Product weighs 300kg - trucks hold 2000kg
+            stockRepository.AddStock(WAREHOUSE_ID, new List<StockAlteration>() { new StockAlteration(productId, 10000) });
+            //Product weighs 300g - trucks hold 2,000,000g
             var outboundOrder = new OutboundOrderRequestModel()
             {
                 WarehouseId = WAREHOUSE_ID,
@@ -213,14 +213,14 @@ namespace ShipItTest
                     new OrderLine()
                     {
                         gtin = GTIN,
-                        quantity = 100
-                        //weighs 30,000kg
+                        quantity = 10000
+                        //weighs 3,000,000g
                     }
                 }
             };
 
             var res = outboundOrderController.Post(outboundOrder);
-            Assert.AreEqual(15, res.TrucksNeeded);
+            Assert.AreEqual(2, res.TrucksNeeded);
         }
     }
 }
