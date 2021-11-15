@@ -94,7 +94,16 @@ namespace ShipIt.Controllers
             }
 
             _stockRepository.RemoveStock(request.WarehouseId, lineItems);
-            return new OutboundOrderRequestResponse {TrucksNeeded = 3};
+
+            float orderWeight = 0;
+            int truckCapacity = 2000;
+            foreach (var order in orderLines)
+            {
+                orderWeight += order.quantity * products[order.gtin].Weight;
+            }
+            var trucksNeeded = (int) Math.Ceiling(orderWeight / truckCapacity);
+            
+            return new OutboundOrderRequestResponse {TrucksNeeded = trucksNeeded};
         }
     }
 }
