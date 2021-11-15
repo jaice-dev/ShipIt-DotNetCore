@@ -14,6 +14,7 @@ namespace ShipIt.Repositories
         int GetTrackedItemsCount();
         int GetStockHeldSum();
         IEnumerable<StockDataModel> GetStockByWarehouseId(int id);
+        IEnumerable<InboundStockDataModel> GetInboundStock(int warehouseId);
         Dictionary<int, StockDataModel> GetStockByWarehouseAndProductIds(int warehouseId, List<int> productIds);
         void RemoveStock(int warehouseId, List<StockAlteration> lineItems);
         void AddStock(int warehouseId, List<StockAlteration> lineItems);
@@ -59,6 +60,49 @@ namespace ShipIt.Repositories
             var stock = base.RunGetQuery(sql, reader => new StockDataModel(reader), noProductWithIdErrorMessage, parameter);
             return stock.ToDictionary(s => s.ProductId, s => s);
         }
+
+        public IEnumerable<InboundStockDataModel> GetInboundStock(int warehouseId)
+        {
+            string sql = @"SELECT gtin.p_id, gtin_cd, gcp.gcp_cd, gtin_nm, m_g, l_th, ds, min_qt,
+                        hld, gln_nm, gln_addr_02, gln_addr_03, gln_addr_04, gln_addr_postalcode, gln_addr_city, contact_tel, contact_mail 
+                        FROM gtin 
+                        INNER JOIN stock ON gtin.p_id = stock.p_id 
+                        INNER JOIN gcp ON gtin.gcp_cd = gcp.gcp_cd
+                        WHERE w_id = @w_id AND ds= 0 AND hld < l_th";
+            var parameter = new NpgsqlParameter("@w_id", warehouseId);
+            string noInboundStockIdMessage = string.Format("No inbound stock for warehouse ID {0}", warehouseId);
+            return base.RunGetQuery(sql, reader => new InboundStockDataModel(reader), noInboundStockIdMessage, parameter);
+
+            // foreach (var item in inboundStock)
+            // {
+            //     var orderQuantity = Math.Max(item.LowerThreshold * 3 - item.Held, item.MinimumOrderQuantity);
+            //
+            //     Company company = new Company();
+            //     company.Gcp = item.Gcp;
+            //     company.Addr2 = item.Addr2;
+            //     company.Addr3 = item.Addr3;
+            //     company.Addr4 = item.Addr4;
+            //     company.PostalCode = item.PostalCode;
+            //     company.City = item.City;
+            //     company.Tel = item.Tel;
+            //     company.Mail = item.Mail;
+            //
+            //     if (!orderlinesByCompany.ContainsKey(company))
+            //     {
+            //         orderlinesByCompany.Add(company, new List<InboundOrderLine>());
+            //     }
+            //
+            //     orderlinesByCompany[company].Add(
+            //         new InboundOrderLine()
+            //         {
+            //             gtin = item.Gtin,
+            //             name = item.Name,
+            //             quantity = orderQuantity
+            //         });
+            // }
+            // return orderlinesByCompany;
+        }
+
             
         public void AddStock(int warehouseId, List<StockAlteration> lineItems)
         {

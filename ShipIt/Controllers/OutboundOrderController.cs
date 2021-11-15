@@ -105,6 +105,7 @@ namespace ShipIt.Controllers
             //TODO Find better place for method
             float orderWeight = 0;
             int truckCapacity = 2000;
+            //TODO weight in grams?! Divide by 1000?
             foreach (var order in orderLines)
             {
                 orderWeight += order.quantity * products[order.gtin].Weight;
