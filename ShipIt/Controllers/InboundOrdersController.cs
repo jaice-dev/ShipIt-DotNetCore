@@ -44,30 +44,34 @@ namespace ShipIt.Controllers
 
             foreach (var product in allStock)
             {
-                var orderQuantity = Math.Max(product.LowerThreshold * 3 - product.Held, product.MinimumOrderQuantity);
-
-                Company company = new Company();
-                company.Gcp = product.Gcp;
-                company.Addr2 = product.Addr2;
-                company.Addr3 = product.Addr3;
-                company.Addr4 = product.Addr4;
-                company.PostalCode = product.PostalCode;
-                company.City = product.City;
-                company.Tel = product.Tel;
-                company.Mail = product.Mail;
-
-                if (!orderlinesByCompany.ContainsKey(company))
+                if (product.Held < product.LowerThreshold && product.Discontinued == 0)
                 {
-                    orderlinesByCompany.Add(company, new List<InboundOrderLine>());
-                }
+                    var orderQuantity = Math.Max(product.LowerThreshold * 3 - product.Held,
+                        product.MinimumOrderQuantity);
 
-                orderlinesByCompany[company].Add(
-                    new InboundOrderLine()
+                    Company company = new Company();
+                    company.Gcp = product.Gcp;
+                    company.Addr2 = product.Addr2;
+                    company.Addr3 = product.Addr3;
+                    company.Addr4 = product.Addr4;
+                    company.PostalCode = product.PostalCode;
+                    company.City = product.City;
+                    company.Tel = product.Tel;
+                    company.Mail = product.Mail;
+
+                    if (!orderlinesByCompany.ContainsKey(company))
                     {
-                        gtin = product.Gtin,
-                        name = product.Name,
-                        quantity = orderQuantity
-                    });
+                        orderlinesByCompany.Add(company, new List<InboundOrderLine>());
+                    }
+
+                    orderlinesByCompany[company].Add(
+                        new InboundOrderLine()
+                        {
+                            gtin = product.Gtin,
+                            name = product.Name,
+                            quantity = orderQuantity
+                        });
+                }
             }
 
 

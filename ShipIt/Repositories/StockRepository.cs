@@ -68,7 +68,7 @@ namespace ShipIt.Repositories
                         FROM gtin 
                         INNER JOIN stock ON gtin.p_id = stock.p_id 
                         INNER JOIN gcp ON gtin.gcp_cd = gcp.gcp_cd
-                        WHERE w_id = @w_id AND ds= 0 AND hld < l_th";
+                        WHERE w_id = @w_id";
             var parameter = new NpgsqlParameter("@w_id", warehouseId);
             string noInboundStockIdMessage = string.Format("No inbound stock for warehouse ID {0}", warehouseId);
             return base.RunGetQuery(sql, reader => new InboundStockDataModel(reader), noInboundStockIdMessage, parameter);

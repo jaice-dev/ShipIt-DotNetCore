@@ -103,14 +103,10 @@ namespace ShipIt.Controllers
         private static int CalculateTrucksNeeded(List<OrderLine> orderLines, Dictionary<string, Product> products)
         {
             //TODO Find better place for method
-            float orderWeight = 0;
-            int truckCapacity = 2000;
+            var orderWeight = orderLines.Select(line => line.quantity * products[line.gtin].Weight).Sum();
+            var truckCapacity = 2000;
             //TODO weight in grams?! Divide by 1000?
-            foreach (var order in orderLines)
-            {
-                orderWeight += order.quantity * products[order.gtin].Weight;
-            }
-
+            
             var trucksNeeded = (int) Math.Ceiling(orderWeight / truckCapacity);
             return trucksNeeded;
         }
