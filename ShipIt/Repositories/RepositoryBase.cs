@@ -94,7 +94,7 @@ namespace ShipIt.Repositories
         {
             return RunGetQuery(sql, mapToDataModel, noResultsExceptionMessage, parameters).Single();
         }
-
+        
         protected IEnumerable<TDataModel> RunGetQuery<TDataModel>(string sql, Func<IDataReader, TDataModel> mapToDataModel, string noResultsExceptionMessage, params NpgsqlParameter[] parameters)
         {
             using (IDbConnection connection = Connection)
@@ -117,6 +117,7 @@ namespace ShipIt.Repositories
                     {
                         throw new NoSuchEntityException(noResultsExceptionMessage);
                     }
+
                     yield return mapToDataModel(reader);
 
                     while (reader.Read())

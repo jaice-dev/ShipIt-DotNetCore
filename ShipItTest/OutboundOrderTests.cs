@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using NUnit.Framework;
 using ShipIt.Controllers;
 using ShipIt.Exceptions;
@@ -57,8 +58,7 @@ namespace ShipItTest
                 }
             };
 
-            outboundOrderController.Post(outboundOrder);
-
+            var res = outboundOrderController.Post(outboundOrder);
             var stock = stockRepository.GetStockByWarehouseAndProductIds(WAREHOUSE_ID, new List<int>() { productId })[productId];
             Assert.AreEqual(stock.held, 7);
         }

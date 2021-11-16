@@ -25,11 +25,13 @@ namespace ShipIt.Controllers
         public EmployeeResponse GetByName([FromQuery] string name)
         {
             Log.Info($"Looking up employee by name: {name}");
-
-            var employee = new Employee(_employeeRepository.GetEmployeeByName(name));
-
-            Log.Info("Found employee: " + employee);
-            return new EmployeeResponse(employee);
+            
+            var employees = _employeeRepository
+                .GetEmployeesByName(name)
+                .Select(e => new Employee(e)).ToList();
+            return new EmployeeResponse(employees);
+     
+            
         }
         
         [HttpGet("id/{id}")]
@@ -79,6 +81,7 @@ namespace ShipIt.Controllers
         [HttpDelete("")]
         public void Delete([FromBody] RemoveEmployeeRequest requestModel)
         {
+            //TODO Make delete based off ID
             string name = requestModel.Name;
             if (name == null)
             {

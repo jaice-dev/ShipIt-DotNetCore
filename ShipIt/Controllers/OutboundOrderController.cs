@@ -27,6 +27,7 @@ namespace ShipIt.Controllers
         [HttpPost("")]
         public OutboundOrderRequestResponse Post([FromBody] OutboundOrderRequestModel request)
         {
+            //TODO tidy this...
             Log.Info(String.Format("Processing outbound order: {0}", request));
 
             var gtins = new List<String>();
@@ -100,8 +101,14 @@ namespace ShipIt.Controllers
             _stockRepository.RemoveStock(request.WarehouseId, lineItems);
 
             var trucksNeeded = CalculateTrucksNeeded(orderLines, products);
-
-            return new OutboundOrderRequestResponse {TrucksNeeded = trucksNeeded};
+            var ordersByTruck = new List<OrdersByTruck>();
+            for (var i = 1; i == trucksNeeded; i++)
+            {
+                var orderWeight = orderLines.Select(line => line.quantity * products[line.gtin].Weight).Sum() / 1000;
+                ordersByTruck.Add(new OrdersByTruck {TruckNumber = i, Orders = orderLines, TruckLoadInKg = orderWeight});
+            }
+            
+            return new OutboundOrderRequestResponse {TrucksNeeded = trucksNeeded, OrdersByTruck = ordersByTruck, Success = true};
         }
     }
 }
