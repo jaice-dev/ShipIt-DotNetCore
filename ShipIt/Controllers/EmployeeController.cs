@@ -28,9 +28,8 @@ namespace ShipIt.Controllers
             
             var employees = _employeeRepository
                 .GetEmployeesByName(name)
-                .Select(e => new Employee(e)).ToList();
+                .Select(e => new Employee(e));
             return new EmployeeResponse(employees);
-     
             
         }
         

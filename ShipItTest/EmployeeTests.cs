@@ -81,8 +81,8 @@ namespace ShipItTest
             onSetUp();
             try
             {
-                var employeeResponse = employeeController.GetByName(NAME);
-                var test = employeeResponse.Employees.Count();
+                var employeeResponse = employeeController.GetByName(NAME).Employees.ToList();
+                // var test = employeeResponse.Employees.Count();
 
                 // Assert.AreEqual(employeeResponse.Employees, new EmployeeResponse().Employees);
                 Assert.Fail("Expected exception to be thrown.");
@@ -135,7 +135,7 @@ namespace ShipItTest
 
             try
             {
-                employeeController.GetByName(NAME);
+                employeeController.GetByName(NAME).Employees.ToList();
                 Assert.Fail("Expected exception to be thrown.");
             }
             catch (NoSuchEntityException e)
