@@ -201,5 +201,57 @@ namespace ShipIt.Repositories
                 }
             }
         }
+        protected List<int> RunTransactionReturningIds(string sql, List<NpgsqlParameter[]> parametersList)
+        {
+            using (IDbConnection connection = Connection)
+            {
+                connection.Open();
+                var command = connection.CreateCommand();
+                var transaction = connection.BeginTransaction();
+                command.Transaction = transaction;
+                var recordsAffected = new List<int>();
+                var ids = new List<Object>();
+
+                try
+                {
+                    foreach (var parameters in parametersList)
+                    {
+                        command.CommandText = sql;
+                        command.Parameters.Clear();
+
+                        foreach (var parameter in parameters)
+                        {
+                            command.Parameters.Add(parameter);
+                        }
+                        
+                        // command.ExecuteNonQuery()
+                        var id = command.ExecuteScalar();
+                        ids.Add(id);
+                        recordsAffected.Add(1);
+                    }
+
+                    for (int i = 0; i < recordsAffected.Count; i++)
+                    {
+                        if (recordsAffected[i] == 0)
+                        {
+                            throw new Exception();
+                        }
+                    }
+
+                    transaction.Commit();
+                }
+                catch (Exception)
+                {
+                    transaction.Rollback();
+                    throw;
+                }
+                finally
+                {
+                    connection.Close();
+                }
+
+                return ids.Select(i => (int) i).ToList();
+            }
+        }
     }
 }

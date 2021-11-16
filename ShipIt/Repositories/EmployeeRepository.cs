@@ -15,9 +15,10 @@ namespace ShipIt.Repositories
         int GetCount();
         int GetWarehouseCount();
         EmployeeDataModel GetEmployeeByName(string name);
+        EmployeeDataModel GetEmployeeByEmployeeId(int id);
         IEnumerable<EmployeeDataModel> GetEmployeesByWarehouseId(int warehouseId);
         EmployeeDataModel GetOperationsManager(int warehouseId);
-        void AddEmployees(IEnumerable<Employee> employees);
+        IEnumerable<Employee> AddEmployees(IEnumerable<Employee> employees);
         void RemoveEmployee(string name);
     }
 
@@ -81,6 +82,15 @@ namespace ShipIt.Repositories
             return base.RunSingleGetQuery(sql, reader => new EmployeeDataModel(reader),noProductWithIdErrorMessage, parameter);
         }
 
+        public EmployeeDataModel GetEmployeeByEmployeeId(int id)
+        {
+            string sql = "SELECT name, w_id, role, ext, em_id FROM em WHERE em_id = @id";
+            var parameter = new NpgsqlParameter("@id", id);
+            string noEmployeeWithIdErrorMessage = string.Format("No employees found with id: {0}", id);
+            return base.RunSingleGetQuery(sql, reader => new EmployeeDataModel(reader), noEmployeeWithIdErrorMessage,
+                parameter);
+        }
+
         public IEnumerable<EmployeeDataModel> GetEmployeesByWarehouseId(int warehouseId)
         {
 
@@ -106,9 +116,9 @@ namespace ShipIt.Repositories
             return base.RunSingleGetQuery(sql, reader => new EmployeeDataModel(reader), noProductWithIdErrorMessage, parameters);
         }
 
-        public void AddEmployees(IEnumerable<Employee> employees)
+        public IEnumerable<Employee> AddEmployees(IEnumerable<Employee> employees)
         {
-            string sql = "INSERT INTO em (name, w_id, role, ext) VALUES(@name, @w_id, @role, @ext)";
+            string sql = "INSERT INTO em (name, w_id, role, ext) VALUES(@name, @w_id, @role, @ext) RETURNING em_id";
             
             var parametersList = new List<NpgsqlParameter[]>();
             foreach (var employee in employees)
@@ -117,7 +127,15 @@ namespace ShipIt.Repositories
                 parametersList.Add(employeeDataModel.GetNpgsqlParameters().ToArray());
             }
 
-            base.RunTransaction(sql, parametersList);
+            var result = base.RunTransactionReturningIds(sql, parametersList);
+            return employees.Select(i => new Employee
+            {
+                Name = i.Name,
+                ext = i.ext,
+                role = i.role,
+                WarehouseId = i.WarehouseId,
+                Id = result[employees.ToList().IndexOf(i)]
+            });
         }
 
         public void RemoveEmployee(string name)

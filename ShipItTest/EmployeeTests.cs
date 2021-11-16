@@ -35,7 +35,20 @@ namespace ShipItTest
             onSetUp();
             var employeeBuilder = new EmployeeBuilder().setName(NAME);
             employeeRepository.AddEmployees(new List<Employee>() {employeeBuilder.CreateEmployee()});
-            var result = employeeController.Get(NAME);
+            var result = employeeController.GetByName(NAME);
+
+            var correctEmployee = employeeBuilder.CreateEmployee();
+            Assert.IsTrue(EmployeesAreEqual(correctEmployee, result.Employees.First()));
+            Assert.IsTrue(result.Success);
+        }
+
+        [Test]
+        public void TestGetEmployeeByEmployeeId()
+        {
+            onSetUp();
+            var employeeBuilder = new EmployeeBuilder().setName(NAME);
+            var createdEmployee = employeeRepository.AddEmployees(new List<Employee>() {employeeBuilder.CreateEmployee()});
+            var result = employeeController.GetById(createdEmployee.First().Id);
 
             var correctEmployee = employeeBuilder.CreateEmployee();
             Assert.IsTrue(EmployeesAreEqual(correctEmployee, result.Employees.First()));
@@ -65,7 +78,7 @@ namespace ShipItTest
             onSetUp();
             try
             {
-                employeeController.Get(NAME);
+                employeeController.GetByName(NAME);
                 Assert.Fail("Expected exception to be thrown.");
             }
             catch (NoSuchEntityException e)
@@ -116,7 +129,7 @@ namespace ShipItTest
 
             try
             {
-                employeeController.Get(NAME);
+                employeeController.GetByName(NAME);
                 Assert.Fail("Expected exception to be thrown.");
             }
             catch (NoSuchEntityException e)
