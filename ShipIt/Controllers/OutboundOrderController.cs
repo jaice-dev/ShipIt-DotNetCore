@@ -101,13 +101,8 @@ namespace ShipIt.Controllers
             _stockRepository.RemoveStock(request.WarehouseId, lineItems);
 
             var trucksNeeded = CalculateTrucksNeeded(orderLines, products);
-            var ordersByTruck = new List<OrdersByTruck>();
-            for (var i = 1; i == trucksNeeded; i++)
-            {
-                var orderWeight = orderLines.Select(line => line.quantity * products[line.gtin].Weight).Sum() / 1000;
-                ordersByTruck.Add(new OrdersByTruck {TruckNumber = i, Orders = orderLines, TruckLoadInKg = orderWeight});
-            }
-            
+            var ordersByTruck = CalculateOrdersByTruck(trucksNeeded, orderLines, products);
+
             return new OutboundOrderRequestResponse {TrucksNeeded = trucksNeeded, OrdersByTruck = ordersByTruck, Success = true};
         }
     }
