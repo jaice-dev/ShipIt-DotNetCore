@@ -58,7 +58,7 @@ namespace ShipIt.Controllers
         }
 
         [HttpPost("")]
-        public Response Post([FromBody] AddEmployeesRequest requestModel)
+        public EmployeeResponse Post([FromBody] AddEmployeesRequest requestModel)
         {
             List<Employee> employeesToAdd = requestModel.Employees;
 
@@ -69,11 +69,11 @@ namespace ShipIt.Controllers
 
             Log.Info("Adding employees: " + employeesToAdd);
 
-            _employeeRepository.AddEmployees(employeesToAdd);
+            var created = _employeeRepository.AddEmployees(employeesToAdd);
 
             Log.Debug("Employees added successfully");
 
-            return new Response() { Success = true };
+            return new EmployeeResponse() { Employees = created, Success = true };
         }
 
         [HttpDelete("")]

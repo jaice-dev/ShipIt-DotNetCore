@@ -160,18 +160,20 @@ namespace ShipItTest
         {
             onSetUp();
             var employeeBuilder = new EmployeeBuilder().setName(NAME);
-            employeeRepository.AddEmployees(new List<Employee>() { employeeBuilder.CreateEmployee() });
+            var firstEmployee = employeeRepository.AddEmployees(new List<Employee>() { employeeBuilder.CreateEmployee() }).First();
             var addEmployeesRequest = employeeBuilder.CreateAddEmployeesRequest();
+            var secondEmployee = employeeController.Post(addEmployeesRequest).Employees.First();
             
-            try
-            {
-                employeeController.Post(addEmployeesRequest);
-                Assert.Fail("Expected exception to be thrown.");
-            }
-            catch (Exception)
-            {
-                Assert.IsTrue(true);
-            }
+            Assert.IsTrue(firstEmployee.Name == secondEmployee.Name);
+            Assert.IsTrue(firstEmployee.ext == secondEmployee.ext);
+            Assert.IsTrue(firstEmployee.role == secondEmployee.role);
+            Assert.IsTrue(firstEmployee.WarehouseId == secondEmployee.WarehouseId);
+            Assert.False(firstEmployee.Id == secondEmployee.Id);
+
+
+
+
+
         }
 
         private bool EmployeesAreEqual(Employee A, Employee B)
