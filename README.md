@@ -11,8 +11,20 @@ Ask a team member for a dump of the production databases to create and populate 
 Restore the dump by running "\i {path to the dump}" in the PSQL tool in pgadmin.
 
 Perform the following DB Migration on both databases:
+```
   ALTER TABLE em DROP CONSTRAINT em_pkey;
   ALTER TABLE em ADD COLUMN em_id serial PRIMARY KEY;
+```
+
+Also Perform the following on both databases:
+```
+CREATE view inbound_stock_view as 
+SELECT w_id, gtin.p_id, gtin_cd, gcp.gcp_cd, gtin_nm, m_g, l_th, ds, min_qt,
+                        hld, gln_nm, gln_addr_02, gln_addr_03, gln_addr_04, gln_addr_postalcode, gln_addr_city, contact_tel, contact_mail 
+                        FROM gtin 
+                        INNER JOIN stock ON gtin.p_id = stock.p_id 
+                        INNER JOIN gcp ON gtin.gcp_cd = gcp.gcp_cd
+```
   
 _(Note: This schema change will not effect any existing clients - it is a backwards
 compatible change as any code relying on employee name for DB queries will still function correctly given unique employee names)_
