@@ -63,11 +63,9 @@ namespace ShipIt.Repositories
 
         public IEnumerable<InboundStockDataModel> GetInboundStock(int warehouseId)
         {
-            string sql = @"SELECT gtin.p_id, gtin_cd, gcp.gcp_cd, gtin_nm, m_g, l_th, ds, min_qt,
+            string sql = @"SELECT p_id, gtin_cd, gcp_cd, gtin_nm, m_g, l_th, ds, min_qt,
                         hld, gln_nm, gln_addr_02, gln_addr_03, gln_addr_04, gln_addr_postalcode, gln_addr_city, contact_tel, contact_mail 
-                        FROM gtin 
-                        INNER JOIN stock ON gtin.p_id = stock.p_id 
-                        INNER JOIN gcp ON gtin.gcp_cd = gcp.gcp_cd
+                        FROM inbound_stock_view
                         WHERE w_id = @w_id";
             // TODO View/Join Index
             var parameter = new NpgsqlParameter("@w_id", warehouseId);
