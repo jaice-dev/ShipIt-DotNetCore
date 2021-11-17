@@ -19,7 +19,7 @@ Perform the following DB Migration on both databases:
 Also Perform the following on both databases:
 ```
 CREATE view inbound_stock_view as 
-SELECT gtin.p_id, gtin_cd, gcp.gcp_cd, gtin_nm, m_g, l_th, ds, min_qt,
+SELECT w_id, gtin.p_id, gtin_cd, gcp.gcp_cd, gtin_nm, m_g, l_th, ds, min_qt,
                         hld, gln_nm, gln_addr_02, gln_addr_03, gln_addr_04, gln_addr_postalcode, gln_addr_city, contact_tel, contact_mail 
                         FROM gtin 
                         INNER JOIN stock ON gtin.p_id = stock.p_id 
