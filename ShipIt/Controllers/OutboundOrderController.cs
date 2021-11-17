@@ -100,9 +100,9 @@ namespace ShipIt.Controllers
 
             _stockRepository.RemoveStock(request.WarehouseId, lineItems);
 
-            var trucksNeeded = CalculateTrucksNeeded(orderLines, products);
-            var ordersByTruck = CalculateOrdersByTruck(trucksNeeded, orderLines, products);
-
+            var ordersByTruck = CalculateOrdersByTruck(orderLines, products);
+            var trucksNeeded = ordersByTruck.Count;
+            
             return new OutboundOrderRequestResponse {TrucksNeeded = trucksNeeded, OrdersByTruck = ordersByTruck, Success = true};
         }
     }
