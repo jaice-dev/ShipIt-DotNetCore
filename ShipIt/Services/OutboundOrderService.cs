@@ -29,8 +29,7 @@ namespace ShipIt_DotNetCore.Services
 
             var ordersByTruck = new List<OrdersByTruck>();
 
-            // trucknumber against weight left
-            var truckCapacityDict = new Dictionary<int, float>();
+            var truckCapacityList = new List<float>();
             //TODO make a list
 
             // Sort all orders by (weight of product * number ordered)
@@ -41,21 +40,18 @@ namespace ShipIt_DotNetCore.Services
                 while (orderLine.quantity != 0)
                 {
                     //If any existing truck has space, allocate there
-                    if (truckCapacityDict.Any(i => i.Value > CalculateOrderWeight(products, orderLine)))
+                    if (truckCapacityList.Any(i => i > CalculateOrderWeight(products, orderLine)))
                     {
-                        // truckCapacityDict.Where().OrderBy.First()
-                        foreach (var entry in truckCapacityDict)
-                        {
-                            if (entry.Value > CalculateOrderWeight(products, orderLine))
-                            {
-                                AllocateOrderToExistingTruck(products, ordersByTruck, entry, orderLine,
-                                    truckCapacityDict);
-                            }
-                        }
+                        var found = truckCapacityList
+                            .Where(i => i > CalculateOrderWeight(products, orderLine))
+                            .OrderBy(i => i)
+                            .First();
+                       
+                        AllocateOrderToExistingTruck(products, ordersByTruck, found, orderLine, truckCapacityList);
                     }
                     else
                     {
-                        AllocateOrderToNewTruck( products, orderLine, ordersByTruck, truckCapacityDict);
+                        AllocateOrderToNewTruck( products, orderLine, ordersByTruck, truckCapacityList);
                     }
                 }
             }
@@ -63,34 +59,37 @@ namespace ShipIt_DotNetCore.Services
             //have to add TruckLoadInKg to every line ordersByTruck
             foreach (var order in ordersByTruck)
             {
-                order.TruckLoadInKg = order.Orders.Select(line => line.quantity * products[line.gtin].Weight).Sum() / 1000;
+                order.TruckLoadInKg = Convert.ToDecimal(
+                    order.Orders
+                    .Select(line => line.quantity * products[line.gtin].Weight)
+                    .Sum()/ 1000);
             }
 
             return ordersByTruck;
         }
 
-        private static void AllocateOrderToExistingTruck(Dictionary<string, Product> products, List<OrdersByTruck> ordersByTruck, KeyValuePair<int, float> entry,
-            OrderLine orderLine, Dictionary<int, float> truckCapacityDict)
+        private static void AllocateOrderToExistingTruck(Dictionary<string, Product> products, List<OrdersByTruck> ordersByTruck, float capacity,
+            OrderLine orderLine, List<float> truckCapacityList)
         {
-            var truckIndex = entry.Key;
-            ordersByTruck[truckIndex - 1].Orders.Add(new OrderLine
+            var truckIndex = truckCapacityList.IndexOf(capacity);
+            ordersByTruck[truckIndex].Orders.Add(new OrderLine
                 {gtin = orderLine.gtin, quantity = orderLine.quantity});
-            truckCapacityDict[truckIndex] -= CalculateOrderWeight(products, orderLine);
+            truckCapacityList[truckIndex] -= CalculateOrderWeight(products, orderLine);
             orderLine.quantity = 0;
         }
 
         private static void AllocateOrderToNewTruck(Dictionary<string, Product> products,
             OrderLine orderLine, List<OrdersByTruck> ordersByTruck,
-            Dictionary<int, float> truckCapacityDict)
+            List<float> truckCapacityList)
         {
-            var truckNumber = CreateTruck(truckCapacityDict);
+            var truckNumber = CreateTruck(truckCapacityList);
             var numberOfItemsOnTruck = Math.Min(CalculateMaxNumberOfItems(products, orderLine), orderLine.quantity);
 
             var order = new OrderLine() {gtin = orderLine.gtin, quantity = numberOfItemsOnTruck};
-            ordersByTruck.Add(new OrdersByTruck {TruckNumber = truckNumber, Orders = new List<OrderLine> {order}});
+            ordersByTruck.Add(new OrdersByTruck {TruckNumber = truckNumber + 1, Orders = new List<OrderLine> {order}});
             
             //Update truck dict to reflect space left
-            truckCapacityDict[truckNumber] -= numberOfItemsOnTruck * (products[orderLine.gtin].Weight / 1000);
+            truckCapacityList[truckNumber] -= numberOfItemsOnTruck * (products[orderLine.gtin].Weight / 1000);
 
             //Update Orderline
             orderLine.quantity -= numberOfItemsOnTruck;
@@ -102,11 +101,10 @@ namespace ShipIt_DotNetCore.Services
             return maxNumberOfItems;
         }
 
-        private static int CreateTruck(Dictionary<int, float> truckDict)
+        private static int CreateTruck(List<float> truckCapacityList)
         {
-            var numberOfTrucks = truckDict.Count;
-            truckDict.Add(numberOfTrucks + 1, 2000);
-            return truckDict.Count;
+            truckCapacityList.Add( 2000);
+            return truckCapacityList.Count - 1;
         }
 
         private static float CalculateOrderWeight(Dictionary<string, Product> products, OrderLine orderLine)

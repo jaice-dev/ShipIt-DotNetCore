@@ -7,7 +7,7 @@ namespace ShipIt.Models.ApiModels
         public int TruckNumber { get; set; }
 
         public List<OrderLine> Orders { get; set; }
-        public float TruckLoadInKg { get; set; }
+        public decimal TruckLoadInKg { get; set; }
     }
     public class OutboundOrderRequestResponse: Response
     {
