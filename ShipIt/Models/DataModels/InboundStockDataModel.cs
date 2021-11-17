@@ -4,7 +4,6 @@ namespace ShipIt.Models.DataModels
 {
     public class InboundStockDataModel : DataModel
     {
-        //TODO use product and company data models
         [DatabaseColumnName("gtin_cd")] public string Gtin { get; set; }
         [DatabaseColumnName("gcp_cd")] public string Gcp { get; set; }
         [DatabaseColumnName("gtin_nm")] public string Name { get; set; }

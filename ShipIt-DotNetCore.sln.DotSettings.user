@@ -1,25 +1,11 @@
 ﻿<wpf:ResourceDictionary xml:space="preserve" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:s="clr-namespace:System;assembly=mscorlib" xmlns:ss="urn:shemas-jetbrains-com:settings-storage-xaml" xmlns:wpf="http://schemas.microsoft.com/winfx/2006/xaml/presentation">
-	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=0820420c_002D2090_002D4714_002D8009_002D961ec5101f9c/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="All tests from &amp;lt;ShipItTest&amp;gt; #4" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
-  &lt;Project Location="C:\Training\ShipIt-DotNetCore\ShipItTest" Presentation="&amp;lt;ShipItTest&amp;gt;" /&gt;&#xD;
-&lt;/SessionState&gt;</s:String>
-	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=2d1fbb45_002Daa88_002D4bb1_002D8e50_002De8c1b44a51dd/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="All tests from &amp;lt;ShipItTest&amp;gt; #8" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
-  &lt;Project Location="C:\Training\ShipIt-DotNetCore\ShipItTest" Presentation="&amp;lt;ShipItTest&amp;gt;" /&gt;&#xD;
-&lt;/SessionState&gt;</s:String>
-	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=42878ab2_002D64b9_002D4e57_002D938d_002Dead6a60697ea/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="All tests from &amp;lt;ShipItTest&amp;gt; #7" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
-  &lt;Project Location="C:\Training\ShipIt-DotNetCore\ShipItTest" Presentation="&amp;lt;ShipItTest&amp;gt;" /&gt;&#xD;
-&lt;/SessionState&gt;</s:String>
+	
+	
+	
 	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=47319198_002D82bf_002D442f_002D80ef_002D5ba18388dfcf/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" IsActive="True" Name="All tests from &amp;lt;ShipItTest&amp;gt;" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
   &lt;Project Location="C:\Training\ShipIt-DotNetCore\ShipItTest" Presentation="&amp;lt;ShipItTest&amp;gt;" /&gt;&#xD;
 &lt;/SessionState&gt;</s:String>
-	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=53f1e4c3_002D444c_002D45fd_002Db23e_002Daaafcd9f0f37/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="All tests from &amp;lt;ShipItTest&amp;gt; #3" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
-  &lt;Project Location="C:\Training\ShipIt-DotNetCore\ShipItTest" Presentation="&amp;lt;ShipItTest&amp;gt;" /&gt;&#xD;
-&lt;/SessionState&gt;</s:String>
-	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=6e609b13_002D386d_002D48d2_002D8fbf_002D2bf922942168/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="All tests from &amp;lt;ShipItTest&amp;gt; #6" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
-  &lt;Project Location="C:\Training\ShipIt-DotNetCore\ShipItTest" Presentation="&amp;lt;ShipItTest&amp;gt;" /&gt;&#xD;
-&lt;/SessionState&gt;</s:String>
-	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=8476b69f_002D419e_002D424a_002D8911_002Da7a458c259af/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="All tests from &amp;lt;ShipItTest&amp;gt; #5" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
-  &lt;Project Location="C:\Training\ShipIt-DotNetCore\ShipItTest" Presentation="&amp;lt;ShipItTest&amp;gt;" /&gt;&#xD;
-&lt;/SessionState&gt;</s:String>
-	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=9fec9e8b_002Dcb7c_002D49de_002Dbd53_002D769c1e164564/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="All tests from &amp;lt;ShipItTest&amp;gt; #2" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
-  &lt;Project Location="C:\Training\ShipIt-DotNetCore\ShipItTest" Presentation="&amp;lt;ShipItTest&amp;gt;" /&gt;&#xD;
-&lt;/SessionState&gt;</s:String></wpf:ResourceDictionary>
+	
+	
+	
+	</wpf:ResourceDictionary>

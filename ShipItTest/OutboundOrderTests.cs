@@ -28,6 +28,10 @@ namespace ShipItTest
         private Product product;
         private int productId;
         private const string GTIN = "0000";
+        
+        private Product product2;
+        private int productId2;
+        private const string GTIN2 = "0001";
 
         public new void onSetUp()
         {
@@ -35,9 +39,12 @@ namespace ShipItTest
             employeeRepository.AddEmployees(new List<Employee>() { EMPLOYEE });
             companyRepository.AddCompanies(new List<Company>() { COMPANY });
             var productDataModel = new ProductBuilder().setGtin(GTIN).CreateProductDatabaseModel();
-            productRepository.AddProducts(new List<ProductDataModel>() { productDataModel });
+            var productDataModel2 = new ProductBuilder().setGtin(GTIN2).CreateProductDatabaseModel();
+            productRepository.AddProducts(new List<ProductDataModel>() { productDataModel, productDataModel2 });
             product = new Product(productRepository.GetProductByGtin(GTIN));
+            product2 = new Product(productRepository.GetProductByGtin(GTIN2));
             productId = product.Id;
+            productId2 = product2.Id;
         }
 
         [Test]
@@ -222,5 +229,42 @@ namespace ShipItTest
             var res = outboundOrderController.Post(outboundOrder);
             Assert.AreEqual(2, res.TrucksNeeded);
         }
+
+        [Test]
+        public void TestTruckAllocation()
+        {
+            onSetUp();
+            stockRepository.AddStock(WAREHOUSE_ID, new List<StockAlteration>() { new StockAlteration(productId, 10000) });
+            stockRepository.AddStock(WAREHOUSE_ID, new List<StockAlteration>() {new StockAlteration(productId2, 1000) });
+            
+            var outboundOrder = new OutboundOrderRequestModel()
+            {
+                WarehouseId = WAREHOUSE_ID,
+                OrderLines = new List<OrderLine>()
+                {
+                    new OrderLine()
+                    {
+                        gtin = GTIN,
+                        quantity = 10000
+                        //weighs 3,000,000g
+                    },
+                    new OrderLine()
+                    {
+                        gtin = GTIN2,
+                        quantity = 1000
+                        //weighs 300,000g
+                    }
+                }
+            };
+            
+            var res = outboundOrderController.Post(outboundOrder);
+            Assert.AreEqual(2, res.TrucksNeeded);
+            Assert.AreEqual(1, res.OrdersByTruck.First().TruckNumber);
+            Assert.AreEqual(1999.8, res.OrdersByTruck.First().TruckLoadInKg);
+            Assert.AreEqual(6666, res.OrdersByTruck.First().Orders.First().quantity);
+
+            
+        }
+        
     }
 }

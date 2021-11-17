@@ -42,11 +42,11 @@ namespace ShipIt.Controllers
             try
             {
                 var allStock = _stockRepository.GetInboundStock(warehouseId);
-                var orderlinesByCompany = GetOrderLinesByCompany(allStock);
+                var orderlinesByCompany = ProcessAllStock(allStock);
 
                 Log.Debug(String.Format("Constructed order lines: {0}", orderlinesByCompany));
 
-                var orderSegments = GetOrderSegments(orderlinesByCompany);
+                var orderSegments = ProcessOrderSegments(orderlinesByCompany);
 
                 Log.Info("Constructed inbound order");
 

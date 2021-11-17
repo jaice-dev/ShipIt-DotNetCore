@@ -8,7 +8,7 @@ namespace ShipIt_DotNetCore.Services
 {
     public class InboundOrdersServices
     {
-        public static Dictionary<Company, List<InboundOrderLine>> GetOrderLinesByCompany(IEnumerable<InboundStockDataModel> allStock)
+        public static Dictionary<Company, List<InboundOrderLine>> ProcessAllStock(IEnumerable<InboundStockDataModel> allStock)
         {
             var orderlinesByCompany = new Dictionary<Company, List<InboundOrderLine>>();
 
@@ -47,7 +47,7 @@ namespace ShipIt_DotNetCore.Services
             return orderlinesByCompany;
         }
         
-        public static IEnumerable<OrderSegment> GetOrderSegments(Dictionary<Company, List<InboundOrderLine>> orderlinesByCompany)
+        public static IEnumerable<OrderSegment> ProcessOrderSegments(Dictionary<Company, List<InboundOrderLine>> orderlinesByCompany)
         {
             var orderSegments = orderlinesByCompany.Select(ol => new OrderSegment()
             {
