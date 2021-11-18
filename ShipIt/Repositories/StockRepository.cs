@@ -67,7 +67,6 @@ namespace ShipIt.Repositories
                         hld, gln_nm, gln_addr_02, gln_addr_03, gln_addr_04, gln_addr_postalcode, gln_addr_city, contact_tel, contact_mail 
                         FROM inbound_stock_view
                         WHERE w_id = @w_id";
-            // TODO View/Join Index
             var parameter = new NpgsqlParameter("@w_id", warehouseId);
             string noInboundStockIdMessage = string.Format("No inbound stock for warehouse ID {0}", warehouseId);
             return base.RunGetQuery(sql, reader => new InboundStockDataModel(reader), noInboundStockIdMessage, parameter);
